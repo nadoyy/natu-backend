@@ -1,3 +1,4 @@
+// routes/auth.js
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
@@ -18,7 +19,14 @@ router.post("/register", async (req, res) => {
     const user = new User({ username, pin: hashedPin, role });
     await user.save();
 
-    res.status(201).json({ message: "User registered", user: { username, role } });
+    // Generate JWT langsung saat register
+    const token = jwt.sign(
+      { id: user._id, username: user.username, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.status(201).json({ token, user: { username, role } });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -34,12 +42,16 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(pin, user.pin);
     if (!isMatch) return res.status(400).json({ error: "Invalid username or PIN" });
 
-    const token = jwt.sign({ id: user._id, username: user.username, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
-    res.json({ token, user: { id: user._id, username: user.username, role: user.role } });
+    const token = jwt.sign(
+      { id: user._id, username: user.username, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.json({ token, user: { username: user.username, role: user.role } });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 module.exports = router;
-
