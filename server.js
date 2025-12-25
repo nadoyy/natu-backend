@@ -16,8 +16,6 @@ const server = http.createServer(app);
 const { initSocket } = require("./utils/socket");
 initSocket(server);
 
-app.use("/api/auth", authRoutes);
-
 app.get("/api/dashboard", auth, (req, res) => {
   res.json(req.user);
 });
