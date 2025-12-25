@@ -3,6 +3,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const bodyParser = require('body-parser');
 const express = require("express");
+const cors = require("cors");
 
 const connectDB = require("./config/db");
 const auth = require("./middleware/auth");
@@ -10,6 +11,7 @@ const auth = require("./middleware/auth");
 connectDB();
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
 const server = http.createServer(app);
