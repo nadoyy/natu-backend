@@ -16,11 +16,8 @@ const server = http.createServer(app);
 const { initSocket } = require("./utils/socket");
 initSocket(server);
 
-<<<<<<< HEAD
 app.use("/api/auth", authRoutes);
 
-=======
->>>>>>> a574cbf (Update backend project, add emergency & auth routes)
 app.get("/api/dashboard", auth, (req, res) => {
   res.json(req.user);
 });
