@@ -1,4 +1,4 @@
-require("dotenv").config();
+require('dotenv').config();
 const http = require('http');
 const { Server } = require('socket.io');
 const bodyParser = require('body-parser');
@@ -6,26 +6,34 @@ const express = require("express");
 const cors = require("cors");
 
 const connectDB = require("./config/db");
-const auth = require("./middleware/auth");
-
 connectDB();
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 const server = http.createServer(app);
 const { initSocket } = require("./utils/socket");
 initSocket(server);
 
+<<<<<<< HEAD
 app.get("/api/dashboard", auth, (req, res) => {
   res.json(req.user);
 });
 
+=======
+>>>>>>> 9ca41a8 (Update server.js dan tambah routes/dashboard)
 // Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/emergency", require("./routes/emergency"));
 app.use("/api/calling", require("./routes/calling"));
+app.use("/api/dashboard", require("./routes/dashboard"));
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () =>
