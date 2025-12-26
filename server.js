@@ -22,10 +22,6 @@ const server = http.createServer(app);
 const { initSocket } = require("./utils/socket");
 initSocket(server);
 
-app.get("/api/dashboard", auth, (req, res) => {
-  res.json(req.user);
-});
-
 // Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/emergency", require("./routes/emergency"));
@@ -36,5 +32,6 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () =>
   console.log(`Server running on port ${PORT}`)
 );
+
 
 
